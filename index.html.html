@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>8th Grade ELA – Sprague Middle School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0a2240;
+      --navy-mid: #1a3a5c;
+      --orange: #e86c00;
+      --orange-light: #ff8c2a;
+      --orange-pale: #fff4eb;
+      --white: #ffffff;
+      --off-white: #f8f6f2;
+      --text: #1a1a2e;
+      --text-muted: #4a5568;
+      --border: #dde3ec;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Source Sans 3', sans-serif; background: var(--off-white); color: var(--text); font-size: 16px; line-height: 1.7; }
+
+    /* HEADER */
+    header { background: var(--navy); color: var(--white); position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .header-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 40px; border-bottom: 3px solid var(--orange); }
+    .header-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; color: var(--white); }
+    .header-logo img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+    .header-title h1 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; line-height: 1.1; }
+    .header-title p { font-size: 0.78rem; color: #a0b8d0; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 300; }
+
+    /* TABS */
+    .tab-bar { display: flex; gap: 0; padding: 0 40px; overflow-x: auto; scrollbar-width: none; background: var(--navy); }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn { color: #c8d8e8; background: none; border: none; font-family: 'Source Sans 3', sans-serif; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 11px 16px; cursor: pointer; white-space: nowrap; border-bottom: 3px solid transparent; transition: all 0.2s; }
+    .tab-btn:hover { color: var(--orange-light); border-bottom-color: var(--orange-light); }
+    .tab-btn.active { color: var(--orange-light); border-bottom-color: var(--orange-light); }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1f4e7a 100%); color: var(--white); padding: 52px 40px 44px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -40px; right: -60px; width: 340px; height: 340px; background: radial-gradient(circle, rgba(232,108,0,0.18) 0%, transparent 70%); border-radius: 50%; }
+    .hero-inner { max-width: 860px; position: relative; z-index: 2; }
+    .hero-eyebrow { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-light); margin-bottom: 8px; }
+    .hero h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 3.5vw, 2.7rem); font-weight: 900; line-height: 1.15; margin-bottom: 12px; }
+    .hero p { font-size: 1rem; color: #b8cfe0; max-width: 580px; font-weight: 300; }
+
+    /* CONTENT */
+    .tab-content { display: none; max-width: 960px; margin: 0 auto; padding: 40px 32px 80px; animation: fadeUp 0.35s ease both; }
+    .tab-content.active { display: block; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* CARDS */
+    .card { background: var(--white); border-radius: 12px; box-shadow: 0 2px 16px rgba(10,34,64,0.07); overflow: hidden; border: 1px solid var(--border); margin-bottom: 28px; }
+    .card-header { background: var(--navy); color: var(--white); padding: 16px 26px; display: flex; align-items: center; gap: 12px; }
+    .card-header.orange { background: var(--orange); }
+    .card-icon { font-size: 1.4rem; line-height: 1; }
+    .card-header h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; }
+    .card-body { padding: 26px; }
+
+    /* WEEK AT A GLANCE */
+    .slides-wrap { width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; background: #e8eef5; }
+    .slides-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--navy-mid); text-align: center; padding: 24px; gap: 10px; }
+    .slides-placeholder .icon { font-size: 2.8rem; }
+    .slides-placeholder p { font-size: 0.88rem; color: var(--text-muted); max-width: 400px; }
+    .slides-placeholder code { font-family: monospace; font-size: 0.8rem; background: #dde6f0; padding: 10px 16px; border-radius: 6px; display: block; margin-top: 6px; word-break: break-all; color: var(--navy); }
+
+    /* INFO ITEMS */
+    .info-list { display: flex; flex-direction: column; gap: 14px; }
+    .info-item { display: flex; gap: 14px; align-items: flex-start; padding: 16px; background: var(--off-white); border-radius: 8px; border-left: 4px solid var(--orange); }
+    .info-item.navy-accent { border-left-color: var(--navy); }
+    .info-item-icon { font-size: 1.3rem; margin-top: 2px; flex-shrink: 0; }
+    .info-item h4 { font-weight: 700; font-size: 0.93rem; color: var(--navy); margin-bottom: 3px; }
+    .info-item p, .info-item li { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* STEPS */
+    .steps { display: flex; flex-direction: column; gap: 14px; }
+    .step { display: flex; gap: 16px; align-items: flex-start; }
+    .step-num { width: 34px; height: 34px; background: var(--orange); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; flex-shrink: 0; }
+    .step-body h4 { font-size: 0.93rem; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+    .step-body p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* TABLE */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .data-table th { background: var(--navy); color: var(--white); padding: 11px 14px; text-align: left; font-weight: 600; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+    .data-table td { padding: 13px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:nth-child(even) td { background: #f4f7fb; }
+    .code-badge { display: inline-block; font-weight: 800; font-size: 1rem; color: var(--navy); background: #dde8f5; border-radius: 5px; padding: 1px 9px; font-family: monospace; }
+
+    /* TWO-COL */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .resource-block { background: var(--off-white); border-radius: 8px; padding: 20px; border-top: 4px solid var(--navy); }
+    .resource-block.orange-top { border-top-color: var(--orange); }
+    .resource-block h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--navy); margin-bottom: 10px; }
+    .resource-block p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 8px; }
+    .day-tag { display: inline-block; background: var(--navy); color: var(--white); font-size: 0.73rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; margin: 3px 3px 3px 0; }
+    .day-tag.orange { background: var(--orange); }
+
+    /* NOTICE */
+    .notice { background: linear-gradient(135deg, #fff8f0, #fff4e8); border: 1px solid #fdd8a8; border-radius: 8px; padding: 13px 17px; font-size: 0.84rem; color: #7a4200; display: flex; gap: 10px; align-items: flex-start; margin-top: 18px; }
+    .notice .icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+
+    /* REDO SECTION */
+    .redo-block { background: var(--off-white); border-radius: 8px; padding: 18px 20px; border-left: 4px solid var(--navy); margin-bottom: 14px; }
+    .redo-block h4 { font-weight: 700; font-size: 0.95rem; color: var(--navy); margin-bottom: 6px; }
+    .redo-block p, .redo-block li { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; }
+    .redo-block ul { margin: 8px 0 0 18px; }
+
+    /* FOOTER */
+    footer { background: var(--navy); color: #8aabcb; text-align: center; padding: 26px 24px; font-size: 0.82rem; border-top: 3px solid var(--orange); }
+    footer a { color: var(--orange-light); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 680px) {
+      .header-top { padding: 10px 16px; }
+      .tab-bar { padding: 0 16px; }
+      .hero { padding: 36px 18px 30px; }
+      .tab-content { padding: 24px 14px 60px; }
+      .card-body { padding: 18px; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <a href="https://sprague.cfisd.net" target="_blank" class="header-logo">
+      <img src="data:image/jpeg;base64,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" alt="Sprague Middle School Logo" />
+      <div class="header-title">
+        <h1>Sprague Middle School</h1>
+        <p>8th Grade English Language Arts</p>
+      </div>
+    </a>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showTab('week')">Week at a Glance</button>
+    <button class="tab-btn" onclick="showTab('expectations')">What to Expect</button>
+    <button class="tab-btn" onclick="showTab('about')">About Me</button>
+    <button class="tab-btn" onclick="showTab('absent')">If Absent</button>
+    <button class="tab-btn" onclick="showTab('grades')">Grades & HAC</button>
+    <button class="tab-btn" onclick="showTab('support')">Cub Lab & Tutoring</button>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Sprague Middle School · Cypress-Fairbanks ISD</div>
+    <h2>Welcome to 8th Grade ELA</h2>
+    <p>Use the tabs above to find everything you need — from the week's schedule to grade information and support resources.</p>
+  </div>
+</div>
+
+<!-- TAB: WEEK AT A GLANCE -->
+<div class="tab-content active" id="tab-week">
+  <div class="card">
+    <div class="card-header orange">
+      <span class="card-icon">📅</span>
+      <h3>Week at a Glance</h3>
+    </div>
+    <div class="card-body">
+      <div class="slides-wrap">
+        <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQxyWvZzkkun8yP4bq98maZCB4zXZu9V_J966HnK9xxqXC7XId0VRja6Ti1d8SzaZIbGzlgUB05oh0o/pubembed?start=false&loop=false&delayms=3000" frameborder="0" width="100%" height="100%" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- TAB: EXPECTATIONS (What to Expect from Me) -->
+<div class="tab-content" id="tab-expectations">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">📋</span>
+      <h3>What to Expect from Me</h3>
+    </div>
+    <div class="card-body">
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-item-icon">📰</div>
+          <div>
+            <h4>Weekly Email</h4>
+            <p>Parents can expect a weekly email linking them to this website, where the Week at a Glance slide is updated with our current calendar and class activities. This is the best way to stay informed about what's happening in ELA each week.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">🕐</div>
+          <div>
+            <h4>Conference Period</h4>
+            <p>My conference period is <strong>1:05 PM – 2:00 PM</strong>. This is the best time to reach me by phone if you need to speak directly. I am happy to connect during this window whenever possible.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">📧</div>
+          <div>
+            <h4>Email is the Best Way to Reach Me</h4>
+            <p>Outside of my conference period, <strong>email is the most reliable way to contact me</strong>. I typically respond within 24–48 hours on school days. You can reach me at <a href="mailto:Lindsay.Thibault@cfisd.net" style="color:var(--orange);font-weight:600;">Lindsay.Thibault@cfisd.net</a>.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">📞</div>
+          <div>
+            <h4>Phone Calls</h4>
+            <p>I teach a high volume of students and do my absolute best to reach out by phone when it's needed. While I may not be able to call every family, please know that phone contact is always my goal when a situation warrants it.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">🤝</div>
+          <div>
+            <h4>Partnership</h4>
+            <p>I believe that students thrive when home and school are working together. Please don't hesitate to reach out with questions, concerns, or celebrations — I want to stay connected with you throughout the year.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: ABOUT ME -->
+<div class="tab-content" id="tab-about">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">👩‍🏫</span>
+      <h3>About Me</h3>
+    </div>
+    <div class="card-body">
+      <div style="background:var(--orange-pale);border:2px dashed var(--orange);border-radius:8px;padding:22px;text-align:center;color:#7a4200;font-size:0.9rem;">
+        ✏️ <strong>Coming Soon!</strong> This section will be personalized with information about me, my teaching background, and what I love about ELA. Check back soon!
+      </div>
+      <div style="margin-top:20px;" class="info-list">
+        <div class="info-item navy-accent">
+          <div class="info-item-icon">📧</div>
+          <div>
+            <h4>Contact Me</h4>
+            <p>Email me at <a href="mailto:Lindsay.Thibault@cfisd.net" style="color:var(--orange);font-weight:600;">Lindsay.Thibault@cfisd.net</a>. I respond within 24–48 hours on school days.</p>
+          </div>
+        </div>
+        <div class="info-item navy-accent">
+          <div class="info-item-icon">🕐</div>
+          <div>
+            <h4>School Hours</h4>
+            <p><strong>7:45 a.m. – 3:05 p.m.</strong> &nbsp;·&nbsp; Conference Period: <strong>1:05 PM – 2:00 PM</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: IF ABSENT -->
+<div class="tab-content" id="tab-absent">
+  <div class="card">
+    <div class="card-header orange">
+      <span class="card-icon">🏠</span>
+      <h3>If Your Student Is Absent</h3>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.93rem;">Students are required to make up all work missed during an absence and will have the <strong>same number of school days they were absent</strong> to do so with no penalty. The first step is always to <strong>check the Week at a Glance tab</strong> on this page to see what was covered and which assignments need to be made up — then follow the process below based on the type of assignment.</p>
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-item-icon">✏️</div>
+          <div>
+            <h4>Daily Grades (CFUs)</h4>
+            <p>Daily grade assignments can be completed <strong>from home</strong>. Students should check Schoology for the assignment and submit it within their make-up window. If a student has questions about the instructions, they can <strong>request tutoring</strong> for additional support.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">📄</div>
+          <div>
+            <h4>Major Grades (RAs &amp; Summative Assessments)</h4>
+            <p>Major grades <em>cannot</em> be completed from home and must be made up in <strong>Cub Lab</strong> (Mon–Thu, 3:05–4:00 PM). If a student needs help understanding the assignment before attending, they can <strong>request a tutoring session</strong>. See the Cub Lab &amp; Tutoring tab for details on how to sign up.</p>
+          </div>
+        </div>
+        <div class="info-item">
+          <div class="info-item-icon">🙋</div>
+          <div>
+            <h4>Follow Up</h4>
+            <p><strong>Students</strong> should follow up with me directly if they have questions about what was missed or what needs to be completed. When late work is submitted, <strong>students should send me a message in Schoology</strong> so I can grade it and update the grade in HAC promptly. <strong>Parents</strong> with questions are welcome to reach out via email and I will respond within 24–48 hours on school days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TAB: GRADES & HAC -->
+<div class="tab-content" id="tab-grades">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">📊</span>
+      <h3>How to Check Grades in HAC</h3>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);margin-bottom:18px;font-size:0.93rem;">Grades are posted in <strong>Home Access Center (HAC)</strong>. Log in at <a href="https://www.cfisd.net/academics/resources/home-access-center-hac" target="_blank" style="color:var(--orange);font-weight:600;">HAC – CFISD</a> using your parent/guardian credentials.</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>What It Means</th>
+            <th>What to Do</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="code-badge">Z</span></td>
+            <td><strong>Zero — work was not submitted.</strong> The assignment was due and nothing was turned in.</td>
+            <td>Have your student submit the work as soon as possible. Work may still be accepted if it is not more than <strong>5 school days late</strong>. Once submitted, students should <strong>send a message in Schoology</strong> so I can grade it and update the grade in HAC.</td>
+          </tr>
+          <tr>
+            <td><span class="code-badge">X</span></td>
+            <td><strong>Exempt / Excused.</strong> The student was not required to complete this assignment (e.g., excused absence, IEP/504 modification, or teacher exemption).</td>
+            <td>No action needed. A grade will not be issued for this assignment — an X averages in as if the assignment does not exist.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:24px;">
+        <div class="info-item" style="border-left-color:var(--navy);">
+          <div class="info-item-icon">🔢</div>
+          <div>
+            <h4>Understanding Decimal Grades (Late and Redo Work Indicator)</h4>
+            <p>Late assignments may be turned in within <strong>five school days</strong> of the due date. Teachers will deduct <strong>5 points per day</strong> from the grade earned. To help everyone track lateness, a decimal is added to the gradebook entry to indicate how many days late the assignment was turned in.</p>
+            <ul style="margin:10px 0 0 16px;font-size:0.9rem;color:var(--text-muted);">
+              <li><strong>.01</strong> = 1 day late &nbsp;·&nbsp; <strong>.02</strong> = 2 days late &nbsp;·&nbsp; <strong>.03</strong> = 3 days late, etc.</li>
+              <li style="margin-top:6px;"><strong>Example:</strong> A student turned in an assignment 2 days late and earned an 87. The teacher deducts 10 points (5 per day × 2 days), leaving a grade of 77. The gradebook will show <strong>77.02</strong> — the .02 signals it was 2 days late.</li>
+            </ul>
+            <p style="margin-top:8px;">Teachers may also add a written note in the gradebook to indicate the assignment was late. This system is a visual tool to help teachers, students, and parents identify when deadlines are not being met.</p>
+            <p style="margin-top:14px;"><strong>Decimals are also used to track redone assignments.</strong> When a student redoes an assignment, the original score is preserved behind the decimal of the new grade, giving parents quick visibility into both scores at a glance.</p>
+            <ul style="margin:8px 0 0 16px;font-size:0.9rem;color:var(--text-muted);">
+              <li><strong>Example:</strong> A student scored a 42 on a test and retook it, earning a 68. The gradebook will show <strong>68.42</strong> — the new grade is 68, and the .42 reflects the original score of 42.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header orange">
+      <span class="card-icon">🔔</span>
+      <h3>Setting Up Grade Alerts in HAC</h3>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.93rem;">HAC can send automatic email notifications when your student's grade drops below a threshold you set. Here's how to turn them on:</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body"><p>Log in to <a href="https://www.cfisd.net/academics/resources/home-access-center-hac" target="_blank" style="color:var(--orange);font-weight:600;">Home Access Center</a> with your parent/guardian credentials.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><p>Click your <strong>name or account icon</strong> in the top-right corner to open account settings.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body"><p>Select <strong>"My Account"</strong> from the dropdown menu.</p></div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body"><p>Scroll to the <strong>"Alert Preferences"</strong> or <strong>"Notification Settings"</strong> section.</p></div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-body"><p>Check the box for <strong>Grade Alerts</strong> and enter a threshold (e.g., 70) — you'll be notified whenever a grade drops below that number.</p></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-body"><p>Confirm your email address is current, then click <strong>Save</strong>.</p></div></div>
+      </div>
+      <div class="notice"><span class="icon">💡</span>Setting a grade alert at 70 is a great way to catch a slipping grade early. You can adjust the threshold anytime in your account settings.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🔁</span>
+      <h3>Redoing Failed Assignments</h3>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);font-size:0.92rem;margin-bottom:18px;">Students have opportunities to redo or retake assignments on which they earned a failing grade (below 70). The highest possible grade on any redo or retake is a <strong>70</strong>. A student may never receive a grade lower than their original grade as a result of redoing an assignment.</p>
+
+      <div class="redo-block">
+        <h4>📝 Summative Assessments (Tests)</h4>
+        <p>A student has <strong>one opportunity per grading period</strong> to retake a test on which they earned a failing grade. Retakes must be completed in <strong>after-school Cub Lab or Tutoring</strong>.</p>
+        <ul>
+          <li>Maximum grade earned on a retake: <strong>70</strong></li>
+        </ul>
+      </div>
+
+      <div class="redo-block">
+        <h4>📄 Relevant Applications (RAs)</h4>
+        <p>A student has <strong>one opportunity per grading period</strong> to redo a Relevant Application on which they earned a failing grade. Redos must be completed in <strong>after-school Cub Lab or Tutoring</strong>.</p>
+        <ul>
+          <li>Maximum grade earned on a redo: <strong>70</strong></li>
+        </ul>
+      </div>
+
+      <div class="redo-block">
+        <h4>✅ Daily Grades / Class Assignments (CFUs)</h4>
+        <p>Teachers will allow students to redo <strong>one daily grade or class assignment</strong> per grading period on which they received a failing grade. Students should <strong>request permission from their teacher</strong> to redo the assignment — once permission is granted, the redo may be completed <strong>from home</strong>.</p>
+        <ul>
+          <li>Maximum grade earned on a redo: <strong>70</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: CUB LAB & TUTORING -->
+<div class="tab-content" id="tab-support">
+  <div class="card">
+    <div class="card-header">
+      <span class="card-icon">🐾</span>
+      <h3>Cub Lab vs. Tutoring vs. Targeted Tutorial</h3>
+    </div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);margin-bottom:20px;font-size:0.93rem;">Sprague offers three types of academic support outside of class. Here's the difference between them and when to use each:</p>
+      <div class="two-col" style="margin-bottom:20px;">
+        <div class="resource-block">
+          <h4>🐾 Cub Lab</h4>
+          <p>Cub Lab is a <strong>supervised setting without direct teacher intervention</strong> for students who need to complete, make up/redo, or have extended time on <strong>Tests (Major Grade)</strong> and <strong>Relevant Applications (RA)</strong>.</p>
+          <p><strong>Offered:</strong> Mondays, Tuesdays, Wednesdays, &amp; Thursdays, <strong>3:05–4:00 PM</strong></p>
+          <p>Students must have <strong>transportation home arranged</strong> by 4:00 PM at the end of Cub Lab.</p>
+        </div>
+        <div class="resource-block orange-top">
+          <h4>📚 ELA Tutoring</h4>
+          <p>Tutoring is <strong>teacher-led, subject-specific support</strong> for students who are struggling to understand a concept or skill. Students can get extra help, ask questions, and receive feedback on their work.</p>
+          <p><strong>Best for:</strong> Students who need additional instruction or practice on a skill.</p>
+          <p><strong>Tutoring ends at 3:45 PM.</strong> Students must have transportation home arranged by this time.</p>
+          <p style="margin-top:10px;"><strong>ELA Tutoring Days:</strong></p>
+          <div style="margin-top:8px;display:flex;flex-wrap:wrap;gap:5px;">
+            <span class="day-tag">Monday – [Teacher]</span>
+            <span class="day-tag orange">Tuesday – [Teacher]</span>
+            <span class="day-tag">Wednesday – [Teacher]</span>
+            <span class="day-tag orange">Friday – [Teacher]</span>
+          </div>
+          <p style="margin-top:10px;color:var(--text-muted);font-size:0.86rem;"><em>✏️ Update teacher names and days above.</em></p>
+        </div>
+      </div>
+
+      <div class="notice">
+        <span class="icon">📝</span>
+        <span><strong>Permission Required:</strong> Students must have written permission to attend Cub Lab or Tutoring, submitted at least <strong>24 hours in advance</strong>. Please plan accordingly to ensure your student can participate.</span>
+      </div>
+
+      <div class="info-item" style="border-left-color:var(--navy);">
+        <div class="info-item-icon">🎯</div>
+        <div>
+          <h4>Targeted Tutorial (Thursdays) — Invitation Only</h4>
+          <p>Targeted Tutorial is a <strong>teacher-selected, invitation-only session</strong> held on Thursdays. Teachers use this time to reteach specific TEKS (Texas Essential Knowledge and Skills) to students who need it.</p>
+          <p style="margin-top:6px;">If your student is invited, you will receive a <strong>permission slip</strong> sent home and a <strong>parent notification by email</strong>. This is not a drop-in session — only students who have been identified by their teacher will attend.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p><strong style="color:white;">8th Grade ELA · Sprague Middle School</strong></p>
+  <p style="margin-top:6px;">10611 Mason Rd., Cypress, TX 77433 &nbsp;·&nbsp; <a href="tel:8323497470">(832) 349-7470</a> &nbsp;·&nbsp; <a href="https://sprague.cfisd.net" target="_blank">sprague.cfisd.net</a></p>
+  <p style="margin-top:6px;">School Hours: 7:45 a.m. – 3:05 p.m. &nbsp;·&nbsp; Conference Period: 1:05 PM – 2:00 PM</p>
+</footer>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
